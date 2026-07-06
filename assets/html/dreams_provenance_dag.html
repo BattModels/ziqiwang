@@ -4240,7 +4240,51 @@ container.addEventListener("touchend", e => {
   }
 });
 
-network.once("afterDrawing", () => network.fit({animation:true}));
+// ── Initial view ──────────────────────────────────────────────────────────
+// The final calculate_lc and generate_structured_report are the payoff of
+// the run; amber highlight so the eye lands there first.
+const FINAL_IDS = ["h2bftj5y", "fil5kj3q"];
+dsNodes.update(FINAL_IDS.map(id => ({
+  id,
+  borderWidth: 3,
+  color: {
+    background: "#3b2a08",
+    border:     "#f59e0b",
+    highlight: { background: "#4d3a10", border: "#fbbf24" },
+    hover:     { background: "#453310", border: "#fbbf24" },
+  },
+  font: { color: "#fde68a", face: "'Fira Code',monospace", size: 13,
+          bold: { color: "#fde68a", mod: "bold" } },
+  shadow: { enabled: true, color: "#f59e0b66", size: 16, x: 0, y: 0 },
+})));
+
+// The two roots land far left of the graph's mass under the hierarchical
+// layout; pull them right to sit at the same x as the production
+// write_QE_script_w_ASE node (o7vvzth0), above the final calculate_lc
+// funnel. Together with the amber finals this puts the whole story arc
+// (roots -> jobs -> lattice constant -> report) in one column.
+function moveRootsAboveFinal() {
+  const anchor = network.getPositions(["o7vvzth0"])["o7vvzth0"];
+  if (!anchor) return;
+  ROOT_IDS.forEach(rid => {
+    const y = network.getPositions([rid])[rid].y;
+    network.moveNode(rid, anchor.x, y);
+  });
+}
+
+network.once("afterDrawing", () => {
+  moveRootsAboveFinal();
+  // Initial camera: the vertical slice from the green roots down to the
+  // amber report, with the node detail panel already populated.
+  // The Fit button still shows the whole graph.
+  network.selectNodes(["h2bftj5y"]);
+  showDetail("h2bftj5y");
+  const focusIds = [...ROOT_IDS, ...FINAL_IDS,
+    ...(NODE_DATA["h2bftj5y"] ? NODE_DATA["h2bftj5y"].parent_ids : [])];
+  network.fit({ nodes: focusIds, animation: false });
+  // Cap the zoom so labels stay readable but context is not lost.
+  if (network.getScale() > 0.9) network.moveTo({ scale: 0.9 });
+});
 </script>
 </body>
 </html>

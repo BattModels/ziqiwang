@@ -1249,6 +1249,8 @@ function applyState(state) {
   renderEvents(state);
   if (SELECTED_NID && state.nodes && state.nodes[SELECTED_NID]) {
     showDetail(SELECTED_NID);
+    // Keep the vis selection visual in sync across poll-driven rebuilds.
+    try { network.selectNodes([SELECTED_NID]); } catch (e) {}
   } else if (SELECTED_NID && (!state.nodes || !state.nodes[SELECTED_NID])) {
     SELECTED_NID = null;
     document.getElementById("node-detail").innerHTML =
@@ -1940,6 +1942,13 @@ function boot() {
   if (EMBEDDED_STATE && EMBEDDED_STATE.version !== undefined) {
     LAST_VERSION = EMBEDDED_STATE.version;
     applyState(EMBEDDED_STATE);
+  }
+  // Open with the final calculate_lc artifact selected, exactly as if the
+  // reader had clicked it: vis selected state plus populated detail panel.
+  const INITIAL_NID = "h2bftj5y";
+  if (!SELECTED_NID && ((CURRENT_STATE || {}).nodes || {})[INITIAL_NID]) {
+    try { network.selectNodes([INITIAL_NID]); } catch (e) {}
+    showDetail(INITIAL_NID);
   }
   startPolling();
   startPulse();

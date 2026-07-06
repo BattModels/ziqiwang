@@ -112,12 +112,15 @@
         gap: 18px;
         margin-bottom: 18px;
     }
+    .chart { height: 420px; }
     @media (max-width: 1400px) {
         .chart-grid { grid-template-columns: 1fr 1fr 1fr; }
+        .chart { height: 340px; }
     }
-    @media (max-width: 1000px) {
-        /* Collapse to one column on narrow screens. */
+    @media (max-width: 640px) {
+        /* Collapse to one column only on true phone widths. */
         .chart-grid { grid-template-columns: 1fr; }
+        .chart { height: 320px; }
     }
 
     .totals {
@@ -167,13 +170,13 @@
      Column 2: tools cumulative line plots (input row, output row).
      Column 3: Judge cumulative line plots (input row, output row). -->
 <div class="chart-grid">
-    <div class="chart" id="barChartIn"   style="height: 420px;"></div>
-    <div class="chart" id="toolLineIn"   style="height: 420px;"></div>
-    <div class="chart" id="judgeLineIn"  style="height: 420px;"></div>
+    <div class="chart" id="barChartIn"></div>
+    <div class="chart" id="toolLineIn"></div>
+    <div class="chart" id="judgeLineIn"></div>
 
-    <div class="chart" id="barChartOut"  style="height: 420px;"></div>
-    <div class="chart" id="toolLineOut"  style="height: 420px;"></div>
-    <div class="chart" id="judgeLineOut" style="height: 420px;"></div>
+    <div class="chart" id="barChartOut"></div>
+    <div class="chart" id="toolLineOut"></div>
+    <div class="chart" id="judgeLineOut"></div>
 </div>
 
 <script>
