@@ -2,6 +2,10 @@ source 'https://rubygems.org'
 
 gem 'jekyll'
 
+# The HPC login node (RHEL 8, glibc 2.28) cannot load the precompiled
+# nokogiri binary, which requires glibc >= 2.29; build it from source.
+gem 'nokogiri', force_ruby_platform: true
+
 # Core plugins that directly affect site building
 group :jekyll_plugins do
     gem 'jekyll-3rd-party-libraries'
