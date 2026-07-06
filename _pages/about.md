@@ -2,16 +2,13 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle: PhD candidate, Mechanical Engineering and Scientific Computing, University of Michigan
 
 profile:
   align: right
   image:
   image_circular: false # crops the image to make it circular
-  more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+  more_info:
 
 selected_papers: false # includes a list of papers marked as "selected={true}"; re-enable once papers.bib has entries
 social: true # includes social icons at the bottom of the page
@@ -27,8 +24,13 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](https://www.reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+I work at the intersection of computational materials science and agentic AI systems. I build multi-agent systems that run the physics simulations behind materials discovery autonomously on supercomputers. Because a correct answer can hide fabricated reasoning, I also build the verification systems that catch agents fabricating results. I was selected for Anthropic's AI for Science program. I am seeking applied research scientist roles and graduate in summer 2026.
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+**Headline results**
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+- **0.2% accuracy** on the CO/Pt(111) puzzle, achieved by DREAMS, my multi-agent simulation framework
+- **27/27 crystal structures** correct on the Sol27LC benchmark
+- **Up to 3x reduction** in agent token usage, measured by judge token analysis
+- **5x error reduction** in machine-learned interatomic potentials for alloy systems
+
+The [projects](/projects/) pages document each system with interactive visualizations. The [CV](/cv/) mirrors my one-page resume.
