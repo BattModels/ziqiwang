@@ -16,12 +16,6 @@ Production screening is still in progress. Every result below is from developmen
 
 The reaction proceeds through four proton-coupled electron transfer steps, and the catalyst's quality is set by the largest free-energy jump among them. Evaluating one candidate means relaxing its bulk structure, choosing facets and terminations, placing adsorbates on surface sites, and computing the free energies of the O, OH, and OOH intermediates, with later steps branching on earlier results.
 
-<div class="row justify-content-sm-center">
-  <div class="col-sm-7 col-md-5">
-    {% include figure.liquid loading="eager" path="assets/img/dreams-oer/oer_free_energy.png" class="img-fluid rounded z-depth-1" zoomable=true caption="Free-energy diagram of the four-step OER pathway. At zero potential (blue) every step is uphill; at the equilibrium potential of 1.23 V (orange) the largest remaining step sets the overpotential the catalyst must overcome." %}
-  </div>
-</div>
-
 To do this autonomously, the agent has to satisfy six requirements at once:
 
 1. Track hundreds of calculations across different systems, terminations, and sites simultaneously, with dependencies between them.
