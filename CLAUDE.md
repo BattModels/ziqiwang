@@ -86,3 +86,40 @@ The repo stays private until Ziqi's advisor (Venkat) reviews the content, especi
 - Commit in small, described steps; never force-push.
 - When adding content about results, if a number or claim is not in this file or provided by Ziqi in the session, ask rather than infer.
 - This is a shared login node: no long-running background processes beyond the preview server, no heavy builds.
+
+## Live-update architecture (decided 2026-07-06)
+
+GitHub Pages is static and the HPC live view is not publicly reachable, so phase 2 "near-live" updates use snapshot-push: a cron job on the cluster exports JSON snapshots and figures, pushes them to this repo, the GitHub Action rebuilds, and page JavaScript fetch()es the JSON at view time. No separately hosted backend. Phase 1's "split large embedded data into JSON + fetch()" rule exists to prepare this.
+
+## Roadmap (one session each; do not run ahead)
+
+Session 1 (done 2026-07-06): git identity check, local preview via ruby/3.3.7 module, baseurl/url fix, demo content purge, first push.
+
+**Session 2: identity + About page.**
+- Fill `_config.yml` identity fields: name, description, GitHub, LinkedIn, Google Scholar, email. Ask Ziqi for each handle; do not guess.
+- About page: positioning statement plus the four headline numbers from this file, visible without scrolling. Positioning to draft against: PhD candidate at the intersection of computational materials science and agentic AI systems; builds multi-agent systems for autonomous scientific computing with verification that catches agent fabrication; selected for Anthropic's AI for Science program; targeting applied research scientist roles. Draft, show Ziqi, iterate. Style rules in this file are strict.
+- Disable unused sections (teaching, books, blog/news) in config unless Ziqi says otherwise. (Ziqi decided 2026-07-06: hide everything except About, Projects, Publications, CV; no profile photo for now.)
+
+**Session 3: DREAMS project page.**
+- Follow the narrative spine and layered disclosure pattern from this file for every asset.
+- Assets to embed (Ziqi must copy them into `assets/html/` from elsewhere on the cluster; ask for paths): provenance DAG HTML (from dag_visualizer.py, vis-network), verification/safety-guard DAG HTML (from verify_dag_visualizer.py), judge token analysis HTML (Plotly, from build_token_html.py).
+- Check each file's size before committing (100 MB hard limit; large embedded data should be split to JSON + fetch()).
+- Prose covers: hierarchical planning supervisor + DFT/HPC worker agents; canvas (shared provenance-tracked memory); report-judge agent; value-flow graph; safety guard catching fabrication (e.g., identity-math expressions); claim-to-source coherence checks. Approved terminology: canvas, report-judge agent, value-flow graph, BEEF-vdW, Sol27LC, CO/Pt(111) puzzle. The safety guard/judge material is the page's centerpiece per this file.
+- Paper link: arXiv:2507.14267, Ziqi first author.
+
+**Session 4: DREAMS-OER project page.**
+- Assets: exploration-range figures, UMAP analysis (featurize_umap.py outputs; UMAP fit on full design space with promising subset projected via .transform()), coverage figures, OER token analysis HTML.
+- Every screening result carries the "production screening in progress" caveat per this file.
+- Context for prose: screening ~381,000 GNoME candidates; disposition gate preventing specification gaming (agents submitting jobs to satisfy queue metrics without analyzing results).
+- Leave an explicit placeholder slot (a marked section, no code) for the phase 2 near-live status panel.
+
+**Session 5: MLIP page + publications + CV.**
+- MLIP page (short): MLIP fine-tuning and benchmarking for alloy systems (broader than lithium; see framing rules), 5x error reduction headline, thermal-expansion validation of BCC Li (100-400 K) and HCP Mg (100-700 K) across MACE and GRACE model families. Ask Ziqi which figures to include; do not fabricate findings.
+- Publications: Ziqi supplies BibTeX for `_bibliography/papers.bib`; ask for it.
+- CV: `layout: cv` via al_folio_cv gem (RenderCV YAML or JSONResume). Content mirrors the one-page resume; ask Ziqi to paste resume content rather than reconstructing it.
+
+**Session 6: polish + review packet.**
+- Cross-page consistency pass against the style rules in this file.
+- Verify all iframes load, all layers of the disclosure pattern present on every asset.
+- The 60-second test: a recruiter reading only the About headline numbers and each asset's layer-1 claim sentence must get the complete story without opening any technical details.
+- Produce a short review checklist for Venkat listing every dataset, figure, and candidate-level result exposed, so hide/keep decisions are easy. After approval, making the repo public is what enables Pages (free plan); verify the production build then.
