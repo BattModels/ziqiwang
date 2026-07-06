@@ -33,4 +33,19 @@ I work at the intersection of computational materials science and agentic AI sys
 - **Up to 3x reduction** in agent token usage, measured by judge token analysis
 - **5x error reduction** in machine-learned interatomic potentials for alloy systems
 
-The [projects](/projects/) pages document each system with interactive visualizations. The [CV](/cv/) mirrors my one-page resume.
+## Projects
+
+<div class="projects">
+  <div class="row row-cols-1 row-cols-md-2">
+  {% assign sorted_projects = site.projects | sort: "importance" %}
+  {% for project in sorted_projects %}
+    {% include projects.liquid %}
+  {% endfor %}
+  </div>
+</div>
+
+## Resume
+
+A full resume, including publications, is on the CV page.
+
+<a href="{{ '/cv/' | relative_url }}" style="display:inline-block; margin-top:0.4rem; padding:8px 18px; border:1px solid var(--global-divider-color); border-radius:6px; text-decoration:none; font-weight:500;">Resume / CV &rarr;</a>
