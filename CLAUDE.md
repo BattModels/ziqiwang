@@ -20,11 +20,12 @@ This repo was created from the al-folio template. `CLAUDE.upstream.md`, `AGENTS.
 ## Site structure (do not add pages beyond these without asking)
 
 1. **About (landing page)**: positioning statement plus headline numbers, visible without scrolling.
-2. **Project: DREAMS**: multi-agent DFT framework, safety guard, judge, provenance DAG, token analysis.
-3. **Project: DREAMS-OER**: autonomous catalyst screening (~381k GNoME candidates), exploration analysis, UMAP, coverage figures. A near-live status panel is planned for phase 2; do not build it yet, but do not design against it.
-4. **Project: MLIP**: machine-learned interatomic potential training and benchmarking for alloy systems (shorter page).
-5. **Publications**: generated from `_bibliography/papers.bib`. DREAMS paper is arXiv:2507.14267.
-6. **CV**: uses the `al_folio_cv` gem (`layout: cv`, RenderCV YAML or JSONResume), mirroring the one-page resume.
+2. **Project: DREAMS** (results page, decided 2026-07-06): architecture, canvas communication, Sol27LC (27/27, <1% average error), CO/Pt(111) (0.2%, self-correction), BEEF-vdW uncertainty, framework benchmark vs MDCrow/ChemGraph. Paper figures live in `assets/img/dreams/` as fig1-fig6 (SITE numbering per Ziqi's files; maps to updated paper figs 2,7,3,4,5,6). Tables 1-5 on site = paper tables 3-7. Reference paper: `tmp-images/DREAMS__Density_Functional_Theory_Based_Research_Engine_for_Agentic_Materials_Simulation.pdf` (updated over the arXiv v1).
+3. **Project: Transparency, Provenance, and Trustworthiness** (`_projects/trustworthiness.md`): purely provenance/verification; hosts the three interactives (provenance DAG, safety-guard verification report, token usage explorer). The "up to 3x token reduction" headline is grounded in the paper: DREAMS used 2-3x fewer tokens than ChemGraph on CO/Pt(111) (paper Table 7 section).
+4. **Project: DREAMS-OER**: autonomous catalyst screening (~381k GNoME candidates), exploration analysis, UMAP, coverage figures. A near-live status panel is planned for phase 2; do not build it yet, but do not design against it.
+5. **Project: MLIP**: machine-learned interatomic potential training and benchmarking for alloy systems (shorter page).
+6. **Publications**: generated from `_bibliography/papers.bib`. DREAMS paper is arXiv:2507.14267.
+7. **CV**: uses the `al_folio_cv` gem (`layout: cv`, RenderCV YAML or JSONResume), mirroring the one-page resume.
 
 ## Narrative spine
 
