@@ -35,6 +35,16 @@ Each mechanism below addresses one or more of these. The workflow the agent foll
 The backend DFT calculator uses GGA+U with U parameters from the Materials Project, and Materials Project standard DFT settings. Custodian handles DFT errors. Adsorption energies are computed by the backend. Preferred termination is determined by a coordination-based approach. The 4-electron reaction pathway is assumed. Structural anomalies are marked as failures. An unexpected result is trusted during runtime and criticized during reporting.
 {% enddetails %}
 
+## Architecture
+
+**DREAMS-OER keeps the DREAMS supervisor-and-worker design and adds an experiment log, an arXiv agent, safety guards, and a report judge.**
+
+A planning supervisor assigns tasks to a DFT agent and an OER-focused HPC agent, each wrapped in safety guards, with a convergence agent for failed calculations. Two additions carry the campaign: an arXiv agent supplies literature grounding for decisions, and everything the agents do is recorded to the canvas and an experiment log. A report-judge agent reviews the final answer against the original request.
+
+{% include figure.liquid loading="eager" path="assets/img/dreams-oer/architecture.png" class="img-fluid rounded z-depth-1" zoomable=true caption="DREAMS-OER architecture. (a) Planning supervisor. (b) DFT agent and tools, behind safety guards. (c) OER and HPC agent with an arXiv agent. (d) Convergence agent. (f) Canvas and experiment log. A report-judge agent checks the final report against the user request." %}
+
+What is new relative to DREAMS: a structured experiment log with live HPC status; enforced reasoning and hypothesis claims; time awareness; traceable data flow; extended safety guards over a hard-coded science backend; an arXiv agent; and reporting, judging, and summarizing. Each is covered below.
+
 ## The experiment log: one memory for the whole campaign
 
 **A relational experiment log tracks every calculation, its reason, and its result, so the agent always knows the state of the campaign.**
@@ -92,6 +102,16 @@ The following are from development runs. Production screening is still in progre
 {% include figure.liquid loading="eager" path="assets/img/dreams-oer/element_occurrence.png" class="img-fluid rounded z-depth-1" zoomable=true caption="Element occurrence across two screening rounds, showing which elements the explored candidates contain." %}
 
 {% include figure.liquid loading="eager" path="assets/img/dreams-oer/umap_structural.png" class="img-fluid rounded z-depth-1" zoomable=true caption="UMAP projection of explored candidates by structure (Coulomb matrix features)." %}
+
+**Token accounting shows where a multi-hour campaign spends its budget, across communication and other tools.**
+
+Tokens are the unit of work and cost for the agent. The explorer below breaks down one OER run by tool and by step, separately for input and output tokens, with a slider to walk through the 656-step session.
+
+<div class="l-page">
+  <iframe src="{{ '/assets/html/oer_token_usage.html' | relative_url }}" frameborder="0" height="1300px" width="100%" style="border: 1px solid var(--global-divider-color); border-radius: 6px;"></iframe>
+</div>
+
+[Open full screen]({{ '/assets/html/oer_token_usage.html' | relative_url }}){:target="\_blank"}
 
 {% details Technical details: acknowledged limitations of the development runs %}
 DREAMS-OER records its own limitations. Computational: PBE+U may miss some electronic-structure effects; the G(OOH) = G(OH) + 3.2 eV scaling relation may not hold for all sites; coordination-based termination ranking is a heuristic, not a surface-energy calculation; no explicit solvation; only thermodynamic overpotentials, no kinetic barriers. Experimental: no experimental validation; Pourbaix stability does not guarantee long-term stability; real surfaces may reconstruct; bulk calculations may miss nanoparticle effects. Data quality in the runs shown: one candidate with the best O-site free energy had all its OH jobs fail; 20 of 56 O jobs failed or were unrecoverable (a 36% failure rate); only 1 to 3 sites per termination and 1 to 2 terminations per candidate were sampled. Hypothesis testing: only 30 candidates tested, in unbalanced element groups, with confounding mixed-metal effects and pre-filtering by Pourbaix stability.
