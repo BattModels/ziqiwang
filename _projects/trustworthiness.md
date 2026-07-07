@@ -3,6 +3,7 @@ layout: page
 title: Transparency, Provenance, and Trustworthiness
 description: provenance records, fabrication-proof verification, and cost accounting that make agent reasoning inspectable
 importance: 2
+img: assets/img/thumbnails/trustworthiness.png
 related_publications: false
 ---
 

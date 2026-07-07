@@ -3,6 +3,7 @@ layout: page
 title: DREAMS-OER
 description: an autonomous agent that screens a materials database for oxygen-evolution catalysts over a multi-hour campaign, tracking hundreds of interdependent simulations without losing the thread
 importance: 4
+img: assets/img/thumbnails/dreams-oer.png
 related_publications: false
 ---
 

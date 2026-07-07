@@ -3,6 +3,7 @@ layout: page
 title: DREAMS
 description: a hierarchical multi-agent AI framework that runs density functional theory simulations end to end, validated at human expert accuracy on standard benchmarks
 importance: 1
+img: assets/img/thumbnails/dreams.png
 related_publications: false
 ---
 
