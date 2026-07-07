@@ -23,9 +23,14 @@ This repo was created from the al-folio template. `CLAUDE.upstream.md`, `AGENTS.
 2. **Project: DREAMS** (results page, decided 2026-07-06): architecture, canvas communication, Sol27LC (27/27, <1% average error), CO/Pt(111) (0.2%, self-correction), BEEF-vdW uncertainty, framework benchmark vs MDCrow/ChemGraph. Paper figures live in `assets/img/dreams/` as fig1-fig6 (SITE numbering per Ziqi's files; maps to updated paper figs 2,7,3,4,5,6). Tables 1-5 on site = paper tables 3-7. Reference paper: `tmp-images/DREAMS__Density_Functional_Theory_Based_Research_Engine_for_Agentic_Materials_Simulation.pdf` (updated over the arXiv v1).
 3. **Project: Transparency, Provenance, and Trustworthiness** (`_projects/trustworthiness.md`): purely provenance/verification; hosts the three interactives (provenance DAG, safety-guard verification report, token usage explorer). The "up to 3x token reduction" headline is grounded in the paper: DREAMS used 2-3x fewer tokens than ChemGraph on CO/Pt(111) (paper Table 7 section).
 4. **Project: DREAMS-OER** (`_projects/dreams-oer.md`, built 2026-07-06 from `tmp-images/dreams oer claude guide.pptx`): autonomous OER catalyst screening over ~381k GNoME candidates. Story is agent-durability over a 7-hour, hundreds-of-jobs campaign (six requirements from deck slide 7), not just screening results. Sections: problem/pathway, why-hard, workflow, relational experiment log, enforced reasoning, time/resource awareness, safety guards + judge, traceable execution (449-node OER DAG screenshot), early analysis (volcano, scaling, UMAPs, element occurrence), acknowledged limitations, phase-2 live-panel placeholder. Figures in `assets/img/dreams-oer/` extracted from the pptx (low-res UMAPs are placeholders; Ziqi supplies hi-res in phase 2). Slide-1 electrolysis GIF is 3rd-party (Wu et al. 2021), excluded. Deck numbers are all Ziqi-sanctioned. OER token-analysis HTML still pending upload to `assets/html/`. Every screening result carries the "production screening in progress" caveat.
-5. **Project: MLIP**: machine-learned interatomic potential training and benchmarking for alloy systems (shorter page).
-6. **Publications**: generated from `_bibliography/papers.bib`. DREAMS paper is arXiv:2507.14267.
-7. **CV**: uses the `al_folio_cv` gem (`layout: cv`, RenderCV YAML or JSONResume), mirroring the one-page resume.
+5. **Project: MLIP**: machine-learned interatomic potential training and benchmarking for alloy systems (shorter page). Not built yet; no project tile until it exists.
+
+Structural change 2026-07-06 (consolidated onto About; supersedes the separate-pages plan above):
+- **Nav is About only.** Everything lives on the About page (`_pages/about.md`): intro + headline results, project tiles (looped from `_projects` via the `projects.liquid` card include, ordered by `importance`), and an inline Resume section.
+- **Project tiles** use placeholder thumbnails in `assets/img/thumbnails/{dreams,trustworthiness,dreams-oer}.png` (generated with matplotlib; Ziqi replaces with real images later). Each project's `img:` front-matter points at its placeholder.
+- **Publications page removed** (was empty; resume covers publications). `_bibliography/papers.bib` stays empty.
+- **CV page removed** (`_pages/cv.md` deleted; no more `al_folio_cv`/RenderCV). The resume is the PDF at `assets/html/Ziqi_Wang_Resume_2026.pdf`, opened via a button on the About Resume section (target=_blank, browser renders it), plus an inline text resume transcribed from that PDF. When the PDF is updated, re-transcribe the inline section to match.
+- The old projects index (`_pages/projects.md`) still exists but is `nav: false`.
 
 ## Narrative spine
 
@@ -41,10 +46,14 @@ Each embedded figure or interactive asset gets, in order:
 
 ## Headline numbers (use these; do not invent or round others)
 
-- 0.2% accuracy on CO/Pt(111)
-- 27/27 crystal structures (Sol27LC)
-- Up to 3x token reduction
-- 5x MLIP error reduction
+Refined wording provided by Ziqi 2026-07-06 (supersedes the older bare numbers):
+
+- 0.2% error on adsorption-energy differences between preferred sites, using the same exchange-correlation functional (CO/Pt(111)). Not "0.2% accuracy".
+- Below 1% error on lattice-constant calculations across 27 elemental bulk materials spanning 3 crystal structures (Sol27LC). This is the accurate framing of the old "27/27".
+- Up to 3x token reduction for the lightweight DREAMS framework compared to baseline frameworks.
+- Worker error rate and judge success rate are currently under benchmarking (state as in progress, no number yet).
+- DREAMS-OER catalyst exploration is currently running; result analysis is preliminary.
+- 5x MLIP error reduction still holds for the MLIP page (roughly 5x lower prediction error vs off-the-shelf models, Li-Mg alloy system), but is not on the About headline list.
 
 ## Factual framing rules (these correct past drafting errors; follow strictly)
 
