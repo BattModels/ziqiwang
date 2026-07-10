@@ -9,29 +9,13 @@ related_publications: false
 
 A plausible report is not evidence of performed analysis. Left unguarded, a language-model agent fails in specific ways: it writes a final number out of nowhere, invents an intermediate input value, derives a result in its own head instead of running the tool, ignores a tool that returned an error and reports success anyway, or reuses an earlier result after it has stopped being valid. For [DREAMS]({{ '/projects/dreams/' | relative_url }}), which runs materials simulations autonomously, any of these is disqualifying: a fabricated value that reaches a report wastes experiments and discredits everything else the system produced.
 
-This page covers the systems that prevent it: every value carries the reasoning and references needed to check it, only tool outputs become citable results, and a report judge re-verifies every reported number against its source. These provenance and anti-fabrication systems are current development, not part of the published paper.
-
-## Provenance: every result has a history
-
-**Every value DREAMS reports can be traced backward to the simulations that produced it.**
-
-The graph below is the provenance record of one DREAMS run, drawn from the canvas, the shared memory where agents record every intermediate result. Each node is a task, a message, or a result. Each arrow shows what was derived from what. Only a result produced by a tool becomes an artifact with a unique reference id, and each artifact records the tool that made it, its full arguments, its output, a description, the context of the call, and the reasoning behind every parameter. An agent cannot mint a reference by hand; only running a tool creates one. The two green nodes are the run's starting inputs; the two gold nodes are the final lattice-constant calculation and the report built from it. Drag to pan and scroll to zoom; the Fit button shows the whole graph.
-
-<div class="l-page">
-  <iframe src="{{ '/assets/html/dreams_provenance_dag.html' | relative_url }}" frameborder="0" height="620px" width="100%" style="border: 1px solid var(--global-divider-color); border-radius: 6px;"></iframe>
-</div>
-
-[Open full screen]({{ '/assets/html/dreams_provenance_dag.html' | relative_url }}){:target="\_blank"}
-
-{% details Technical details %}
-The graph is a snapshot of the canvas provenance DAG at step 29 of a run, exported by `dag_visualizer.py` and rendered with vis-network. Graph data is embedded in the HTML; no server is involved after page load.
-{% enddetails %}
+The defense is a chain. The agent must state why it sets each value and in what context; every tool result is stored as an artifact that bundles that reasoning with the value and a unique reference; those artifacts link into a full provenance history; and a judge re-verifies every reported number against that history. These provenance and anti-fabrication systems are current development, not part of the published paper.
 
 ## Enforced reasoning and context: no parameter can be set without a stated why, under a stated context
 
 **No value the agent commits is a bare number. Every tool call carries a per-parameter reason and a context, and any sensitive parameter must cite the earlier result it came from.**
 
-Provenance records where a value came from; enforced reasoning records why. Every tool call must fill two fields, which the agent's tools require by their type signature rather than by request.
+The chain starts before anything is saved. Every tool call must fill two fields, which the agent's tools require by their type signature rather than by request.
 
 <div class="reason-card">
   <div class="reason-field">
@@ -50,11 +34,52 @@ Provenance records where a value came from; enforced reasoning records why. Ever
 
 On top of these, a human-defined set of sensitive parameters, the ones that actually move the answer, must be set with a reference to the earlier result that produced the value. That reference is checked against both the existence of the source and the equality of the value. An agent can forget to record a reason and be stopped before it proceeds; it cannot invent one that passes the check.
 
+## What a registered artifact contains
+
+**When a tool runs, its result is stored as an artifact that bundles the value with everything needed to check it, and is stamped with a unique reference.**
+
+The reasoning and context above do not float free. Every time a tool produces a result, that result is registered as a single artifact, and only a tool call can create one. The artifact records the value together with how it was produced and why.
+
+<div class="reason-card">
+  <div class="reason-field">
+    <div class="reason-name">register_tool_output(...) <span class="reason-type">returns a reference id</span></div>
+    <div class="reason-desc">One tool result becomes one artifact, recording:</div>
+    <ul class="artifact-fields">
+      <li><span class="af-key">tool_name</span> which tool produced the result</li>
+      <li><span class="af-key">args</span> the full argument settings it ran with</li>
+      <li><span class="af-key">value</span> the result itself</li>
+      <li><span class="af-key">description</span> what the result is</li>
+      <li><span class="af-key">context</span> which study or exploration the call was part of</li>
+      <li><span class="af-key">reasons</span> the per-parameter rationale from the previous section</li>
+      <li><span class="af-key">parent_result_ids</span> references to the artifacts this one was derived from</li>
+      <li><span class="af-key">metadata</span> anything else attached to the result</li>
+    </ul>
+  </div>
+</div>
+
+The call returns a unique reference id. That id is the only way to cite this result later, whether as the source for a sensitive parameter or as a claim in a report, and it is what the provenance history in the next section is built from.
+
+## Provenance: every result has a history
+
+**Every value DREAMS reports can be traced backward to the simulations that produced it.**
+
+Because each artifact records the references it was derived from, the artifacts link into a graph. The graph below is the provenance record of one DREAMS run, drawn from the canvas, the shared memory where agents record every intermediate result. Each node is an artifact; each arrow follows a parent reference, showing what was derived from what. The two green nodes are the run's starting inputs; the two gold nodes are the final lattice-constant calculation and the report built from it. Drag to pan and scroll to zoom; the Fit button shows the whole graph.
+
+<div class="l-page">
+  <iframe src="{{ '/assets/html/dreams_provenance_dag.html' | relative_url }}" frameborder="0" height="620px" width="100%" style="border: 1px solid var(--global-divider-color); border-radius: 6px;"></iframe>
+</div>
+
+[Open full screen]({{ '/assets/html/dreams_provenance_dag.html' | relative_url }}){:target="\_blank"}
+
+{% details Technical details %}
+The graph is a snapshot of the canvas provenance DAG at step 29 of a run, exported by `dag_visualizer.py` and rendered with vis-network. Each node is an artifact registered when a tool produced a result; edges follow the parent references recorded on each artifact. Graph data is embedded in the HTML; no server is involved after page load.
+{% enddetails %}
+
 ## Verification: the agent cannot fabricate results
 
 **Every claim in the report below was checked against the simulation record that produced it, parameter by parameter, by a separate judge agent.**
 
-Two things make a report checkable. Every claimed number must carry a reference to the tool result that produced it, and the supervisor names in advance which results must be claimed, so the agent cannot quietly drop an inconvenient one. Numbers read from raw output files go through guarded math and extraction tools that require an evidence snippet and check the value against it, which stops the agent from computing or rounding a number in its head.
+A complete history is only useful if something checks it. Two things make a report checkable. Every claimed number must carry a reference to the tool result that produced it, and the supervisor names in advance which results must be claimed, so the agent cannot quietly drop an inconvenient one. Numbers read from raw output files go through guarded math and extraction tools that require an evidence snippet and check the value against it, which stops the agent from computing or rounding a number in its head.
 
 Once a report exists, a judge agent re-verifies it recursively, one parameter at a time. For each sensitive parameter it first confirms, deterministically, that the cited source exists and its value matches. Then it weighs whether that source is a sensible origin at all: a reference is rejected when it is cross-wired (for example a k-point setting pinned to an energy-cutoff convergence result), when a production run leaves a sensitive parameter with no source, or when a rationale claims a sub-study the context does not support. The judge is deliberately strict; in development it flagged real mistakes, including a value referenced to an input file instead of the output file that computed it. Its own findings become a judging report, which is itself verifiable.
 
@@ -69,6 +94,14 @@ Below is the verification view for one DREAMS report, the lattice constant of bo
 {% details Technical details %}
 The view is exported by `verify_dag_visualizer.py`. The page loads its verification state from a separate JSON file at view time, the same fetch pattern planned for near-live status updates on this site. The judge classifies each sensitive parameter by its role (referenced from an upstream result, held without a source, or intentionally varied) and applies a matching rule to each, so an atypical value is accepted when the recorded context justifies it and rejected when it does not. Tabs expose node detail, the claim list with claim-to-source coherence checks, and the event log of the verification run.
 {% enddetails %}
+
+## Adversarial tuning of the judge
+
+**A judge is only trustworthy if it is hard to fool, so it is hardened against inputs designed to slip a fabrication past it.**
+
+<div class="l-body" style="border: 1px dashed var(--global-divider-color); border-radius: 6px; padding: 24px; text-align: center; color: var(--global-text-color-light);">
+This section is in progress. It will describe how the judge is stress-tested and tuned against adversarial cases so that a plausible but unsupported claim does not pass. Details to be added.
+</div>
 
 ## Cost: what running and verifying agents costs
 
@@ -87,8 +120,8 @@ The explorer is exported by `build_token_html.py` and rendered with Plotly. Char
 {% enddetails %}
 
 <style>
-/* Reason/context schema card in the enforced-reasoning section.
-   Colors come from the existing theme variables so it tracks light/dark. */
+/* Reason/context and artifact schema cards. Colors come from the existing
+   theme variables so they track light and dark. */
 .reason-card {
   border: 1px solid var(--global-divider-color);
   border-radius: 8px;
@@ -122,5 +155,22 @@ The explorer is exported by `build_token_html.py` and rendered with Plotly. Char
   letter-spacing: 0.03em;
   font-size: 0.8rem;
   margin-right: 0.25rem;
+}
+.artifact-fields { margin: 0.6rem 0 0; padding-left: 0; list-style: none; }
+.artifact-fields li {
+  margin-bottom: 0.35rem;
+  color: var(--global-text-color-light);
+  font-size: 0.92rem;
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 0.6rem;
+}
+.af-key {
+  font-family: var(--global-code-font, monospace);
+  color: var(--global-theme-color);
+  font-size: 0.85rem;
+}
+@media (max-width: 576px) {
+  .artifact-fields li { grid-template-columns: 1fr; gap: 0.1rem; }
 }
 </style>
