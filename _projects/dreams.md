@@ -11,7 +11,7 @@ New materials for batteries and catalysts are screened by simulation before anyo
 
 DREAMS (DFT-based Research Engine for Agentic Materials Simulation) automates this work. It is described in the DREAMS paper ([arXiv:2507.14267](https://arxiv.org/abs/2507.14267)), where I am first author. This page covers the framework and its benchmark results.
 
-Automation at this level creates a second problem: an agent can report a correct-looking answer built on reasoning it never performed. The provenance records, verification systems, and safety guard that address this are covered on the [Transparency, Provenance, and Trustworthiness]({{ '/projects/trustworthiness/' | relative_url }}) page.
+(Automation at this level creates a second problem: an agent can report a correct-looking answer built on reasoning it never performed. The provenance records, verification systems, and safety guard that address this are covered on the [Transparency, Provenance, and Trustworthiness]({{ '/projects/trustworthiness/' | relative_url }}) page.)
 
 ## One supervisor plans, specialized agents execute
 
@@ -131,7 +131,9 @@ To confirm that DREAMS reached the right answer for the right physical reason, w
 
 <div class="caption">Table 5: Benchmarking agentic systems on both challenges: fraction of workflow steps attempted and succeeded, mean absolute percentage error of the final result, and standard deviation across independent runs.</div>
 
-All three frameworks were given the same two tasks: the Sol27LC lattice constant of BCC lithium, a short and well-structured workflow, and the CO/Pt(111) adsorption problem, a long and failure-prone one. Each framework was run several times so the comparison measures reliability as well as accuracy, using four metrics: how many workflow steps it attempted, how many it completed successfully, the error of its final number, and the spread across repeated runs.
+The two baselines represent different agent designs. MDCrow is an early single-agent framework, built on LangChain, that reasons and calls tools in one sequential loop, which limits how well it can coordinate multi-step dependencies. ChemGraph is a graph-based multi-agent framework, built on LangGraph, with modular coordination, but unlike DREAMS it has no specialized worker agents for domain-specific subtasks, no persistent communication layer for exchange between agents and tools, and no way to adapt its plan from intermediate results. To keep the comparison fair, both baselines were given the same DFT toolset as DREAMS, without the canvas, and only their prompts were adjusted to the DFT setting while preserving each framework's original design (for example, "You are a molecular dynamics expert" became "You are a DFT expert").
+
+Each framework was run several times on both tasks, so the comparison measures reliability as well as accuracy, using four metrics: how many workflow steps it attempted, how many it completed successfully, the error of its final number, and the spread across repeated runs.
 
 All three handle the short Sol27LC workflow. The differences appear on the long-horizon problem: MDCrow loses context and misuses tools; ChemGraph completes most steps but repeats calculations and overwrites intermediate files, producing an invalid answer. DREAMS keeps full context through the canvas and hierarchical communication, and its lower token usage comes from shared context and clear handoffs rather than repeated work.
 
