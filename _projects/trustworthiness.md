@@ -32,13 +32,16 @@ The chain starts before anything is saved. Every tool call must fill two fields,
   </div>
 </div>
 
-On top of these, a human-defined set of sensitive parameters, the ones that actually move the answer, must be set with a reference to the earlier result that produced the value. That reference is checked against both the existence of the source and the equality of the value. An agent can forget to record a reason and be stopped before it proceeds; it cannot invent one that passes the check.
+Requiring this before anything runs buys two things:
+
+1. Stating the context and reason up front heads off trivial mistakes the agent would otherwise make.
+2. The recorded context and reasons are what the semantic judge later uses to check that each setting is scientifically sound.
 
 ## What a registered artifact contains
 
 **When a tool runs, its result is stored as an artifact that bundles the value with everything needed to check it, and is stamped with a unique reference.**
 
-The reasoning and context above do not float free. Every time a tool produces a result, that result is registered as a single artifact, and only a tool call can create one. The artifact records the value together with how it was produced and why.
+Every time a tool produces a result, that result is registered as a single artifact, and only a tool call can create one. The artifact records the value together with how it was produced and why.
 
 <div class="reason-card">
   <div class="reason-field">
@@ -58,6 +61,8 @@ The reasoning and context above do not float free. Every time a tool produces a 
 </div>
 
 The call returns a unique reference id. That id is the only way to cite this result later, whether as the source for a sensitive parameter or as a claim in a report, and it is what the provenance history in the next section is built from.
+
+A human can mark a set of parameters as sensitive, the ones that actually move the answer. Each of those must then be set with a reference to the earlier result that produced its value, and that reference is checked against both the existence of the source and the equality of the value. The agent can omit a reference and be stopped before it proceeds; it cannot fabricate one that passes both checks.
 
 ## Provenance: every result has a history
 
