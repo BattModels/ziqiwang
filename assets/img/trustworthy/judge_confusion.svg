@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 524" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">How often the checker can be fooled</title>
+  <desc id="desc">Of 83 deliberately deceptive test cases, the strongest checker caught 80 and 3 slipped through. Of 62 legitimate cases, it approved 61 and raised 1 false alarm.</desc>
+  <style>
+    :root{
+      --surface:#fcfcfb; --border:#e6e5e1; --ink:#0b0b0b; --ink2:#52514e;
+      --good:#0ca30c; --warn:#c98500; --crit:#d03b3b;
+      --good-fill:rgba(12,163,12,0.09); --warn-fill:rgba(201,133,0,0.11); --crit-fill:rgba(208,59,59,0.11);
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --surface:#1a1a19; --border:#33322f; --ink:#f4f4f0; --ink2:#c3c2b7;
+        --good:#2bbf2b; --warn:#fab219; --crit:#e66767;
+        --good-fill:rgba(43,191,43,0.14); --warn-fill:rgba(250,178,25,0.13); --crit-fill:rgba(230,103,103,0.14);
+      }
+    }
+    .title{fill:var(--ink);font-size:22px;font-weight:700}
+    .sub{fill:var(--ink2);font-size:13px}
+    .colh{fill:var(--ink);font-size:14.5px;font-weight:600}
+    .colh2{fill:var(--ink2);font-size:12px}
+    .rowh{fill:var(--ink);font-size:14.5px;font-weight:600}
+    .rowh2{fill:var(--ink2);font-size:12px}
+    .num{fill:var(--ink);font-size:42px;font-weight:700}
+    .clabel{font-size:14px;font-weight:600}
+    .cap{fill:var(--ink2);font-size:12.5px}
+    .glyph{fill:#ffffff;font-size:18px;font-weight:700}
+  </style>
+
+  <rect x="4" y="4" width="712" height="516" rx="14" fill="var(--surface)" stroke="var(--border)"/>
+
+  <text x="28" y="44" class="title">How often can the checker be fooled?</text>
+  <text x="28" y="68" class="sub">Strongest of five AI models, scored on 145 hand-built cases &#8212; real results and deliberate fakes.</text>
+
+  <!-- column headers -->
+  <text x="320" y="101" class="colh" text-anchor="middle">Judge flagged it</text>
+  <text x="320" y="118" class="colh2" text-anchor="middle">(stopped)</text>
+  <text x="570" y="101" class="colh" text-anchor="middle">Judge approved it</text>
+  <text x="570" y="118" class="colh2" text-anchor="middle">(let through)</text>
+
+  <!-- row 1 label: flawed -->
+  <text x="28" y="197" class="rowh">Flawed / fabricated</text>
+  <text x="28" y="215" class="rowh2">should be caught &#183; 83 cases</text>
+
+  <!-- row 2 label: legit -->
+  <text x="28" y="355" class="rowh">Legitimate result</text>
+  <text x="28" y="373" class="rowh2">should pass &#183; 62 cases</text>
+
+  <!-- CELL (flawed, flagged) = 80 caught -->
+  <rect x="196" y="128" width="248" height="150" rx="10" fill="var(--good-fill)" stroke="var(--good)" stroke-width="1.5"/>
+  <circle cx="412" cy="158" r="15" fill="var(--good)"/>
+  <text x="412" y="164" class="glyph" text-anchor="middle">&#10003;</text>
+  <text x="220" y="226" class="num">80</text>
+  <text x="220" y="252" class="clabel" fill="var(--good)">Caught the fake</text>
+
+  <!-- CELL (flawed, approved) = 3 slipped -->
+  <rect x="448" y="128" width="244" height="150" rx="10" fill="var(--crit-fill)" stroke="var(--crit)" stroke-width="2.5"/>
+  <circle cx="660" cy="158" r="15" fill="var(--crit)"/>
+  <text x="660" y="164" class="glyph" text-anchor="middle">&#10007;</text>
+  <text x="472" y="226" class="num">3</text>
+  <text x="472" y="252" class="clabel" fill="var(--crit)">Slipped through</text>
+
+  <!-- CELL (legit, flagged) = 1 false alarm -->
+  <rect x="196" y="286" width="248" height="150" rx="10" fill="var(--warn-fill)" stroke="var(--warn)" stroke-width="1.5"/>
+  <circle cx="412" cy="316" r="15" fill="var(--warn)"/>
+  <text x="412" y="323" class="glyph" text-anchor="middle">!</text>
+  <text x="220" y="384" class="num">1</text>
+  <text x="220" y="410" class="clabel" fill="var(--warn)">False alarm</text>
+
+  <!-- CELL (legit, approved) = 61 approved -->
+  <rect x="448" y="286" width="244" height="150" rx="10" fill="var(--good-fill)" stroke="var(--good)" stroke-width="1.5"/>
+  <circle cx="660" cy="316" r="15" fill="var(--good)"/>
+  <text x="660" y="323" class="glyph" text-anchor="middle">&#10003;</text>
+  <text x="472" y="384" class="num">61</text>
+  <text x="472" y="410" class="clabel" fill="var(--good)">Correctly approved</text>
+
+  <!-- caption -->
+  <text x="28" y="470" class="cap">Each row is what the case truly was; each column is the judge's call.</text>
+  <text x="28" y="492" class="cap">Green = correct &#183; red = the costly error (a fake let through) &#183; amber = a harmless false alarm.</text>
+</svg>
