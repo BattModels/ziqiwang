@@ -27,6 +27,16 @@ The graph below is the provenance record of one DREAMS run, drawn from the canva
 The graph is a snapshot of the canvas provenance DAG at step 29 of a run, exported by `dag_visualizer.py` and rendered with vis-network. Graph data is embedded in the HTML; no server is involved after page load.
 {% enddetails %}
 
+## Enforced reasoning and context: no parameter can be set without a stated why, under a stated context
+
+**No value the agent commits is a bare number: each one carries the reason it was chosen and the context it applies to.**
+
+<div class="l-body" style="border: 1px dashed var(--global-divider-color); border-radius: 6px; padding: 24px; text-align: center; color: var(--global-text-color-light);">
+Figure placeholder: what a canvas artifact contains (its value, the reason it was chosen, and the context it is valid under). Image to be added.
+</div>
+
+Provenance records where a value came from; enforced reasoning records why. The prompts that drive the agent require a justification at every decision point: why this material, why these settings, and for each simulation parameter, why that value, what effect it is expected to have, and the conditions under which it is valid. Each artifact stored on the canvas keeps that reasoning and context next to the value, which is what makes a result checkable, comparable, and trustworthy later.
+
 ## Verification: the agent cannot fabricate results
 
 **Every claim in the report below was checked against the simulation record that produced it.**

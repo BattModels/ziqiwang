@@ -38,9 +38,9 @@ The backend DFT calculator uses GGA+U with U parameters from the Materials Proje
 
 **DREAMS-OER keeps the DREAMS supervisor-and-worker design and adds an experiment log, an arXiv agent, safety guards, and a report judge.**
 
-A planning supervisor assigns tasks to a DFT agent and an OER-focused HPC agent, each wrapped in safety guards, with a convergence agent for failed calculations. Two additions carry the campaign: an arXiv agent supplies literature grounding for decisions, and everything the agents do is recorded to the canvas and an experiment log. A report-judge agent reviews the final answer against the original request.
+A planning supervisor breaks the objective into a plan and assigns each step to one of two worker agents, both wrapped in safety guards. The DFT agent generates crystal structures, optimizes settings, samples k-points, and saves files, with a convergence agent as its child to handle failed calculations. The OER agent drives the HPC tools that load, generate, and submit jobs and monitor them on the cluster, and it calls an arXiv agent for literature grounding. Everything the agents do is read from and recorded to the canvas, which holds notes, artifacts, reports, and a running log. When the supervisor decides the task is done, a report-judge agent reviews the final answer against a set of rules before it is accepted.
 
-{% include figure.liquid loading="eager" path="assets/img/dreams-oer/architecture.png" class="img-fluid rounded z-depth-1" zoomable=true caption="DREAMS-OER architecture. (a) Planning supervisor. (b) DFT agent and tools, behind safety guards. (c) OER and HPC agent with an arXiv agent. (d) Convergence agent. (f) Canvas and experiment log. A report-judge agent checks the final report against the user request." %}
+{% include figure.liquid loading="eager" path="assets/img/dreams-oer/architecture.png" class="img-fluid rounded z-depth-1" zoomable=true caption="DREAMS-OER architecture. (a) Planning supervisor with an editable plan. (b) DFT agent and its tools, behind safety guards. (c) OER agent, which drives the HPC job tools and an arXiv agent. (d) Convergence agent, a child of the DFT agent. (f) Canvas holding notes, artifacts, reports, and the log. A report-judge agent checks the final report against its rules." %}
 
 What is new relative to DREAMS: a structured experiment log with live HPC status; enforced reasoning and hypothesis claims; time awareness; traceable data flow; extended safety guards over a hard-coded science backend; an arXiv agent; and reporting, judging, and summarizing. Each is covered below.
 
@@ -54,11 +54,11 @@ Instead of holding job state in a conversation that scrolls away, DREAMS-OER wri
 
 {% include figure.liquid loading="eager" path="assets/img/dreams-oer/explog_summary.png" class="img-fluid rounded z-depth-1" zoomable=true caption="A rolled-up status summary from the log: per candidate, how many bulk, surface, O adsorption, and OH adsorption jobs have finished." %}
 
-## Enforced reasoning: no action without a stated why
+## An investigation, not a random search
 
-**Before any consequential action, the agent must state its reason and the hypothesis it is testing.**
+**What the agent studies next follows from what it just learned, not from random sampling.**
 
-The prompts that drive the agent require a justification at every decision point: why this candidate, why this termination, why this adsorption site, and for each simulation parameter, why that value and what effect it is expected to have. This makes the agent's behavior legible after the fact and produces a hypothesis-driven trail rather than a black box.
+DREAMS-OER reasons from the literature and its own accumulated results toward the next candidate to try. It states an explicit hypothesis before testing it and records whether the hypothesis held. The chain below is one example: the agent behaves like an investigator working a lead, not a search that samples the space blindly. The discipline behind this, requiring a stated reason and context for every choice, is described on the [Transparency, Provenance, and Trustworthiness]({{ '/projects/trustworthiness/' | relative_url }}) page.
 
 {% include figure.liquid loading="eager" path="assets/img/dreams-oer/reasoning_chain.png" class="img-fluid rounded z-depth-1" zoomable=true caption="An example reasoning chain: literature points to Ir and Ru, an initial test finds a Y-Ir compound exceptional, the agent forms an optimization plan, finds the database sparse for that family, hypothesizes a scandium analog by periodic-table reasoning, tests it, and records that the hypothesis failed and a new direction is needed." %}
 
@@ -92,7 +92,7 @@ The following are from development runs. Production screening is still in progre
 
 {% include figure.liquid loading="eager" path="assets/img/dreams-oer/volcano.png" class="img-fluid rounded z-depth-1" zoomable=true caption="Explored candidates on the OER activity map: computed O-site free energy against an optimal window (left), and the candidates placed on the two-dimensional overpotential volcano under the scaling relation and the ideal case (right)." %}
 
-{% include figure.liquid loading="eager" path="assets/img/dreams-oer/scaling_relations.png" class="img-fluid rounded z-depth-1" zoomable=true caption="Scaling relation among the adsorbate free energies for the explored candidates." %}
+The three intermediates are not independent. Across catalysts, the adsorption free energies of O, OH, and OOH are linearly correlated, a well-known scaling relation (for OER, the free energy of OOH stays close to that of OH plus about 3.2 eV). This correlation puts a floor under the overpotential any single-site catalyst can reach, which is why the peak of the volcano sits above the ideal line.
 
 **Dimensionality reduction shows how much of the design space the agent covered, in composition and in structure.**
 
