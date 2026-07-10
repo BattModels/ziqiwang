@@ -7,7 +7,13 @@ img: assets/img/thumbnails/provance_trust_tn.png
 related_publications: false
 ---
 
-A plausible report is not evidence of performed analysis. Left unguarded, a language-model agent fails in specific ways: it writes a final number out of nowhere, invents an intermediate input value, derives a result in its own head instead of running the tool, ignores a tool that returned an error and reports success anyway, or reuses an earlier result after it has stopped being valid. For [DREAMS]({{ '/projects/dreams/' | relative_url }}), which runs materials simulations autonomously, any of these is disqualifying: a fabricated value that reaches a report wastes experiments and discredits everything else the system produced.
+A plausible report is not evidence of performed analysis. For [DREAMS]({{ '/projects/dreams/' | relative_url }}), which runs materials simulations autonomously, a fabricated value that reaches a report wastes experiments and discredits everything else the system produced. Left unguarded, an early version of DREAMS failed in specific, recurring ways, including:
+
+- **Hallucinated final result**: a number written out of nowhere.
+- **Hallucinated intermediate inputs**: values invented for a later step to consume.
+- **Self-computed numbers**: results derived in the agent's own head instead of by a tool.
+- **Overriding the tool**: the tool says no, the agent reports yes anyway.
+- **Stale results**: an earlier value reused after it has stopped being valid.
 
 The defense is a chain. The agent must state why it sets each value and in what context; every tool result is stored as an artifact that bundles that reasoning with the value and a unique reference; those artifacts link into a full provenance history; and a judge re-verifies every reported number against that history. These provenance and anti-fabrication systems are current development, not part of the published paper.
 
