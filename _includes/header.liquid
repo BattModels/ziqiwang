@@ -1,3 +1,61 @@
+<style>
+  /* Hover dropdown on the Projects nav tab. Colors from theme variables. */
+  .nav-projects { position: relative; }
+  .nav-projects .projects-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    margin: 0;
+    padding: 6px 0;
+    list-style: none;
+    background: var(--global-bg-color);
+    border: 1px solid var(--global-divider-color);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+    z-index: 1050;
+  }
+  .nav-projects:hover .projects-menu,
+  .nav-projects:focus-within .projects-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .nav-projects .projects-menu li { margin: 0; }
+  .nav-projects .projects-menu a {
+    display: block;
+    padding: 7px 16px;
+    white-space: nowrap;
+    color: var(--global-text-color);
+    text-decoration: none;
+    font-size: 0.92rem;
+    line-height: 1.35;
+  }
+  .nav-projects .projects-menu a:hover {
+    background: var(--global-hover-color);
+    color: var(--global-hover-text-color);
+  }
+  /* On the collapsed mobile navbar, nest the links inline instead of floating. */
+  @media (max-width: 576px) {
+    .nav-projects .projects-menu {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      box-shadow: none;
+      border: none;
+      background: transparent;
+      padding: 2px 0 4px 12px;
+      min-width: 0;
+    }
+    .nav-projects .projects-menu a { padding: 4px 8px; white-space: normal; }
+  }
+</style>
+
 <header>
   <!-- Nav Bar -->
   <nav id="navbar" class="navbar navbar-light navbar-expand-sm {% if site.navbar_fixed %}fixed-top{% else %}sticky-top{% endif %}" role="navigation">
@@ -56,8 +114,14 @@
           </li>
 
           <!-- Scroll-index sections that live on the About page -->
-          <li class="nav-item scrollspy-item" data-scrollspy="projects">
+          <li class="nav-item scrollspy-item nav-projects" data-scrollspy="projects">
             <a class="nav-link" href="{{ '/#projects' | relative_url }}">projects</a>
+            <ul class="projects-menu">
+              {% assign sorted_projects = site.projects | sort: 'importance' %}
+              {% for proj in sorted_projects %}
+                <li><a href="{{ proj.url | relative_url }}">{{ proj.title }}</a></li>
+              {% endfor %}
+            </ul>
           </li>
           <li class="nav-item scrollspy-item" data-scrollspy="resume">
             <a class="nav-link" href="{{ '/#resume' | relative_url }}">resume</a>
