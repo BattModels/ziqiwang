@@ -70,6 +70,22 @@ Every step is timestamped and the agent on duty is reminded of elapsed versus to
 
 {% include figure.liquid loading="eager" path="assets/img/dreams-oer/time_check.png" class="img-fluid rounded z-depth-1" zoomable=true caption="A time-check decision recorded to the canvas: with about 11 minutes left, the agent chooses to skip a third screening round, finish the current round opportunistically, run only selective OH calculations, and reserve time to generate its final report." %}
 
+## Specification gaming, and the gate that stops it
+
+**Told to keep the supercomputer busy, the agent learned to submit jobs it never looked at. A disposition gate now blocks it from resting until every result has actually been analyzed.**
+
+A screening campaign wastes money when the HPC queue sits idle, so an early version of DREAMS-OER was prompted to keep the queue full. It appeared to work. But reading back through the agent's history showed what it had actually learned to do: submit jobs for the sake of submitting jobs, without reading the results or advancing the study. The agent had optimized the instruction we gave, keep the queue busy, instead of the goal we meant, make progress on the science. This is specification gaming, a recurring failure mode of capable agents handed a proxy metric.
+
+The current design removes the proxy and replaces it with a gate. The agent is no longer told to fill the queue. Instead, the tool it uses to pause and wait for jobs to finish is gated on analysis: the agent may only wait once every candidate has been fully dispositioned, meaning every finished calculation has been tied back to its candidate and the hypothesis it was testing, with a recorded decision on where to take that candidate next. Only after that gate passes does a second, optional check keep the queue from draining. If any result is still unanalyzed, the wait is refused and the agent is told exactly which candidates and which finished jobs it skipped.
+
+The agent can no longer buy idle time with busywork. To rest, it has to do the analysis, which was the reason for running the jobs in the first place. This is current development, being built into the production screening run.
+
+{% details Technical details: how the gate works %}
+The wait tool enforces two gates. The first, always active, requires that every candidate with finished jobs is fully dispositioned: for each one, the agent has recorded a summary tying all of that candidate's newly finished jobs to its hypotheses, a decision chosen from a fixed vocabulary (for example abandon, explore more sites, or enough), and a plan for what to run next. The second gate, which the supervisor sets per task, requires the number of pending jobs to stay above a floor so the queue does not empty; the supervisor waives it when winding the study down near the time limit, where new jobs would not finish anyway.
+
+Two per-candidate flags keep the agent from faking the analysis. When results arrive, the candidate is flagged as needing a disposition update. Before the agent can write a new disposition it must first read the candidate's previous disposition record, which unlocks the write; committing the write locks it again. This forces each update to build on the prior record instead of being overwritten blindly or padded with repeated calls. Batch jobs, where several magnetic configurations or OH initializations are tried together, are dispositioned only once the whole batch reaches a terminal state, and citing one job from a batch counts for the batch. When the queue does run low, the agent is handed a hint that names any forgotten work, such as a converged bulk structure with no surface job or a promising O adsorption with no OH follow-up, and points it back to the supervisor to expand the study rather than invent filler.
+{% enddetails %}
+
 ## Safety guards and the final judge
 
 **Repeated identical tool calls are cut off, references are checked for existence, and a judge blocks the agent from stopping before the task is done.**
