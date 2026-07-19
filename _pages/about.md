@@ -51,7 +51,7 @@ I work at the intersection of computational materials science and agentic AI sys
 
 <p class="resume-lead">Trustworthy scientific LLM agent researcher. First author of DREAMS.</p>
 
-<a class="resume-pdf-btn" href="{{ '/assets/html/Ziqi_Wang_Resume_2026.pdf' | relative_url }}" target="_blank">Open full resume (PDF) ↗</a>
+<a class="resume-pdf-btn" href="{{ '/assets/html/Ziqi_Wang_Resume_Mat.pdf' | relative_url }}" target="_blank">Open full resume (PDF) ↗</a>
 
 <h3 class="resume-section">Education</h3>
 
@@ -81,11 +81,9 @@ I work at the intersection of computational materials science and agentic AI sys
     <div class="resume-sub">Fully autonomous LLM agent that runs expert-level materials simulations</div>
     <ul>
       <li>Reached human-expert accuracy on multi-step autonomous workflows: reproduced a long-debated surface-chemistry benchmark (CO/Pt(111)) to within 0.2% and matched expert structures on all 27 systems of a crystal benchmark, where a single-agent baseline failed every run and a multi-agent baseline missed by 389%.</li>
-      <li>Canvas: a shared communication-and-memory scheme for long-horizon, complex runs, with report-based history compression suited to scientific workflows, giving finer control over agent context than general-purpose agent frameworks.</li>
-      <li>Deterministic and LLM-based safety guards that vouch for each result's credibility, validating every parameter setting against customizable rule levels (R1, R2, ...) and user-defined sensitive parameters.</li>
-      <li>Full traceability and white-box transparency: every result is registered with its inputs and outputs, verified by reference ID (ref_id), and linked to its sources through a provenance DAG, with each claim backed by a context-aware reasoning chain annotated with those IDs.</li>
-      <li>Enables recursive, deep debugging of long, multi-step runs.</li>
-      <li>Benchmarked against representative single-agent and multi-agent frameworks, reporting accuracy, success rate, and token usage (cost), using up to roughly 3x fewer tokens than the baseline framework on long-horizon tasks.</li>
+      <li>Canvas: a shared communication-and-memory scheme with report-based history compression for long-horizon runs; benchmarked against single-agent and multi-agent baselines on accuracy, success rate, and token cost, using up to roughly 3x fewer tokens on long-horizon tasks.</li>
+      <li>Deterministic and LLM-based safety guards validate every parameter against customizable rule levels and user-defined sensitive parameters; tuned on an adversarial harness of 145 scenarios from real DFT runs, best judge at 1 false positive and 3 false negatives (n=145) across five frontier LLMs.</li>
+      <li>Full traceability: every result registered with its inputs and outputs, verified by reference ID, and linked to its sources through a provenance DAG, each claim backed by an ID-annotated reasoning chain, enabling recursive debugging of long runs.</li>
     </ul>
   </div>
 </div>
@@ -96,10 +94,10 @@ I work at the intersection of computational materials science and agentic AI sys
     <div class="resume-title">DREAMS-OER</div>
     <div class="resume-sub">Autonomous agent for open-ended catalyst discovery over a roughly 380,000-material space</div>
     <ul>
-      <li>Scaled the agent from a single fixed task to open-ended search over roughly 380,000 candidate materials (Google DeepMind's GNoME set), choosing what to study next (material, surface, site, three intermediates) from accumulated evidence rather than a fixed plan. Demonstrated on behavioral runs; production screening in progress.</li>
-      <li>Built a multi-level relational experiment log, enabling efficient information retrieval and progress tracking across hundreds of partial, interdependent studies.</li>
+      <li>Scaled the agent from a single fixed task to open-ended search over roughly 380,000 candidate materials (Google DeepMind's GNoME set, DFT via VASP), choosing what to study next (material, surface, site, three intermediates) from accumulated evidence rather than a fixed plan. Demonstrated on behavioral runs; production screening in progress.</li>
+      <li>Grounded decisions in retrieval-augmented (RAG) literature results and a multi-level relational experiment log that enables efficient information retrieval and progress tracking across hundreds of partial, interdependent studies.</li>
       <li>Gave the agent live time- and compute-budget awareness to submit work opportunistically, keep the cluster busy while reasoning, and re-plan under pressure, completing a bounded 7-hour study without overrunning.</li>
-      <li>Hardened it against scale-only failure modes: a disposition gate enforcing genuine engagement with each result (removing a queue-occupancy gaming pattern), a runaway-loop guard, retrieval-augmented literature grounding, and required hypothesis and limitation logging, including a "too credulous" failure now being addressed.</li>
+      <li>Caught workers specification-gaming a queue-occupancy target, submitting jobs to satisfy the metric without analyzing results; fixed it structurally with a disposition gate making engagement with every completed result a verifiable predicate before rest, plus a runaway-loop guard.</li>
     </ul>
   </div>
 </div>
@@ -107,11 +105,13 @@ I work at the intersection of computational materials science and agentic AI sys
 <div class="resume-entry">
   <div class="resume-date">In preparation</div>
   <div class="resume-content">
-    <div class="resume-title">Non-linear Material-Property Prediction with Machine-Learning Interatomic Potentials</div>
+    <div class="resume-title">Alloy Thermodynamics and Phase Behavior with Machine-Learning Interatomic Potentials</div>
     <ul>
-      <li>Built a committee-based active-learning loop to fine-tune several universal ML interatomic potentials (MACE, NequIP, GRACE, MatterSim) into accurate, low-cost surrogates for the Li-Mg alloy system, cutting prediction error on target physical properties by roughly 5x versus off-the-shelf models.</li>
-      <li>Showed that weighting training toward higher-order (stress) information, not just energy, most improves accuracy on hard second-derivative properties, with the gain transferring across multiple properties.</li>
-      <li>Mapped how alloying produces non-linear excess effects in stiffness and atomic-transport barriers across composition, quantifying behavior that cannot be inferred from the pure end-members alone.</li>
+      <li>Built a committee-based active-learning loop to fine-tune universal MLIPs (MACE, NequIP, GRACE, MatterSim) into low-cost surrogates for the Li-Mg alloy system, cutting prediction error by roughly 5x versus off-the-shelf models; stress-weighted training gave the largest gains on hard second-derivative properties.</li>
+      <li>Ran LAMMPS molecular dynamics melting and solidification campaigns with MLIPs and classical potentials to locate melting temperatures across composition for binary and ternary lithium alloys.</li>
+      <li>Mapped solid-phase boundaries of binary alloys with canonical and semi-grand canonical Monte Carlo, using cluster-expansion models and LAMMPS with MLIPs and classical potentials.</li>
+      <li>Computed free energies by thermodynamic integration to an Einstein crystal; constructed phase diagrams via thermodynamic integration, metadynamics, heat capacity, and moving-interface methods.</li>
+      <li>Quantified non-linear excess effects in stiffness and atomic-transport barriers across alloy composition.</li>
     </ul>
   </div>
 </div>
@@ -124,12 +124,18 @@ I work at the intersection of computational materials science and agentic AI sys
     <div class="resume-detail">Z. Wang, H. Huang, H. Zhao, C. Xu, S. Zhu, J. Janssen, V. Viswanathan. "DREAMS: Density Functional Theory Based Research Engine for Agentic Materials Simulation." <a href="https://arxiv.org/abs/2507.14267">arXiv:2507.14267</a> (2025).</div>
   </div>
 </div>
+<div class="resume-entry">
+  <div class="resume-date">2025</div>
+  <div class="resume-content">
+    <div class="resume-detail">A. M. Yao, S.-J. Kim, V. D. Veeraraghavan, Z. Wang, S. Gasilov, A. Kastengren, Y.-M. Chiang, P. Fenter, V. Viswanathan. "Effective Li-Ion Transport Quantification in Composite Cathodes for All-Solid-State Batteries via Multiscale Modeling and Experiments." Chem. Mater. 37, 9260-9267 (2025).</div>
+  </div>
+</div>
 
 <h3 class="resume-section">Technical skills</h3>
 
 <div class="resume-entry">
   <div class="resume-date resume-date--label">Agentic AI / LLM</div>
-  <div class="resume-content"><div class="resume-detail">Multi-agent system design, harness design, SKILL design, guardrail and provenance systems, agent evaluation and benchmarking, LangGraph, LangChain</div></div>
+  <div class="resume-content"><div class="resume-detail">Multi-agent system design, harness design, SKILL design, guardrail and provenance systems, agent evaluation and benchmarking, RAG, LangGraph, LangChain</div></div>
 </div>
 <div class="resume-entry">
   <div class="resume-date resume-date--label">Machine learning</div>
@@ -137,7 +143,7 @@ I work at the intersection of computational materials science and agentic AI sys
 </div>
 <div class="resume-entry">
   <div class="resume-date resume-date--label">Atomistic simulation</div>
-  <div class="resume-content"><div class="resume-detail">DFT (Quantum ESPRESSO), ASE, molecular dynamics (LAMMPS), Monte Carlo, nudged elastic band, Bayesian error estimation (BEEF)</div></div>
+  <div class="resume-content"><div class="resume-detail">DFT (Quantum ESPRESSO, VASP), ASE, molecular dynamics (LAMMPS), Monte Carlo, cluster expansion, thermodynamic integration, nudged elastic band</div></div>
 </div>
 <div class="resume-entry">
   <div class="resume-date resume-date--label">Computing</div>
